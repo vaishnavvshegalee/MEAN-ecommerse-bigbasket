@@ -26,6 +26,7 @@ export class ProductsComponent implements OnInit {
   };
   categoryList: any[] = [];
   productList: any[] = [];
+  isLoading: boolean = false;
   constructor(private productSrv: ProductService) {}
   ngOnInit(): void {
     this.getProducts();
@@ -34,9 +35,18 @@ export class ProductsComponent implements OnInit {
   getCategories() {
     this.productSrv.getAllCategory().subscribe((res: any) => {
       this.categoryList = res.data[0].categories;
-      // console.log(this.categoryList);
+      console.log(this.categoryList);
     });
   }
+
+  // get category name
+  getCategoryName(categoryId: Number) {
+    const category = this.categoryList.find(
+      (cate) => cate.categoryId === categoryId
+    );
+    return category ? category.categoryName : 'unknown';
+  }
+
   onCreate() {
     this.productSrv.saveProducts(this.productObj).subscribe((res: any) => {
       if (!res.data) {
@@ -49,16 +59,39 @@ export class ProductsComponent implements OnInit {
     });
   }
   getProducts() {
+    this.isLoading = true;
     this.productSrv.getAllProducts().subscribe((res: any) => {
       // console.log(res);
       this.productList = res;
+      this.isLoading = false;
     });
   }
 
+  onUpdate(id: any) {
+    this.productSrv.updateProduct(id, this.productObj).subscribe((res: any) => {
+      this.getProducts();
+      console.log(res);
+    });
+  }
+
+  onDelete(id: any) {
+    if (confirm('Are you sure want to delete this product?')) {
+      debugger;
+      this.productSrv.deleteProduct(id).subscribe((res: any) => {
+        console.log(res);
+        this.getProducts();
+      });
+    }
+  }
   closeSidebar() {
     this.isSidebarVisible = false;
   }
   openSidebar() {
     this.isSidebarVisible = true;
+  }
+
+  onEdit(item: any) {
+    this.productObj = item;
+    this.openSidebar();
   }
 }

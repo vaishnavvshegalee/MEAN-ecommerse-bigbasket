@@ -25,4 +25,21 @@ export class ProductService {
       obj
     );
   }
+
+  updateProduct(id: any, obj: any) {
+    return this.http.put(
+      Constant.API_END_POINT + Constant.METHODS.UPDATE_PRODUCT + '/' + id,
+      obj,
+      {
+        headers: {
+          'content-type': 'application/json',
+        },
+      }
+    );
+  }
+  deleteProduct(id: any) {
+    return this.http.delete(
+      Constant.API_END_POINT + Constant.METHODS.DELETE_PRODUCT + '/' + id
+    );
+  }
 }

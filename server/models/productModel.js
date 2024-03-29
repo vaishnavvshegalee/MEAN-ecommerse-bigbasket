@@ -11,6 +11,7 @@ const productSchema = new Schema({
   deliveryTimeSpan: String,
   categoryId: { type: String, default: 0 },
   productImgUrl: String,
+  categoryName: String,
 });
 
 productSchema.pre("save", async function (next) {
