@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../services/product/product.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-products',
@@ -27,32 +28,39 @@ export class ProductsComponent implements OnInit {
   categoryList: any[] = [];
   productList: any[] = [];
   isLoading: boolean = false;
-  constructor(private productSrv: ProductService) {}
+  constructor(
+    private productSrv: ProductService,
+    private toastr: ToastrService
+  ) {}
   ngOnInit(): void {
     this.getProducts();
     this.getCategories();
   }
   getCategories() {
     this.productSrv.getAllCategory().subscribe((res: any) => {
-      this.categoryList = res.data[0].categories;
+      this.categoryList = res.data;
       console.log(this.categoryList);
     });
   }
 
   // get category name
   getCategoryName(categoryId: Number) {
-    const category = this.categoryList.find(
-      (cate) => cate.categoryId === categoryId
-    );
+    // console.log('category id', categoryId);
+    // console.log('categoryList');
+
+    const category = this.categoryList.find((n) => n.categoryId == categoryId);
+
     return category ? category.categoryName : 'unknown';
   }
 
   onCreate() {
     this.productSrv.saveProducts(this.productObj).subscribe((res: any) => {
       if (!res.data) {
-        alert('All fields are required!');
+        // alert('All fields are required!');
+        this.toastr.error('All fields are required!');
       } else {
-        alert('Product Created Successfully');
+        // alert('Product Created Successfully');
+        this.toastr.success('Product Created Successfully.');
         console.log(res);
         this.getProducts();
       }
@@ -69,16 +77,19 @@ export class ProductsComponent implements OnInit {
 
   onUpdate(id: any) {
     this.productSrv.updateProduct(id, this.productObj).subscribe((res: any) => {
-      this.getProducts();
       console.log(res);
+      // alert('Product updated successfully.');
+      this.toastr.success('Product updated successfully.');
+      this.getProducts();
     });
   }
 
   onDelete(id: any) {
     if (confirm('Are you sure want to delete this product?')) {
-      debugger;
+      // debugger;
       this.productSrv.deleteProduct(id).subscribe((res: any) => {
-        console.log(res);
+        // console.log(res);
+        this.toastr.success('Product deleted successfully.');
         this.getProducts();
       });
     }
