@@ -6,5 +6,8 @@ export const Constant = {
     CREATE_PRODUCT: 'createProduct',
     UPDATE_PRODUCT: 'updateProduct',
     DELETE_PRODUCT: 'deleteProduct',
+    CREATE_CATEGORY: '/category/new',
+    DELETE_CATEGORY: '/category/delete',
+    UPDATE_CATEGORY: '/category/update',
   },
 };

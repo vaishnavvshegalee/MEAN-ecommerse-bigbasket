@@ -9,7 +9,7 @@ const productSchema = new Schema({
   productDescription: String,
   createdDate: { type: Date, default: Date.now },
   deliveryTimeSpan: String,
-  categoryId: { type: String, default: 0 },
+  categoryId: { type: Number },
   productImgUrl: String,
   categoryName: String,
 });
